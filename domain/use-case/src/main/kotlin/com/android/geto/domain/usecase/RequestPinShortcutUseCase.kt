@@ -19,12 +19,10 @@ package com.android.geto.domain.usecase
 
 import com.android.geto.domain.model.RequestPinShortcutResult
 import com.android.geto.domain.platform.ShortcutManagerCompatWrapper
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RequestPinShortcutUseCase @Inject constructor(private val shortcutManagerCompatWrapper: ShortcutManagerCompatWrapper) {
-    suspend operator fun invoke(
+    operator fun invoke(
         componentName: String,
         icon: ByteArray?,
         id: String,
