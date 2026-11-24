@@ -36,16 +36,16 @@ class RequestPinShortcutUseCase @Inject constructor(private val shortcutManagerC
         }
 
         return if (shortcutManagerCompatWrapper.requestPinShortcut(
-                    componentName = componentName,
-                    icon = icon,
-                    id = id,
-                    shortLabel = shortLabel,
-                    longLabel = longLabel,
-                )
-            ) {
-                RequestPinShortcutResult.SupportedLauncher
-            } else {
-                RequestPinShortcutResult.UnsupportedLauncher
+                componentName = componentName,
+                icon = icon,
+                id = id,
+                shortLabel = shortLabel,
+                longLabel = longLabel,
+            )
+        ) {
+            RequestPinShortcutResult.SupportedLauncher
+        } else {
+            RequestPinShortcutResult.UnsupportedLauncher
         }
     }
 }
