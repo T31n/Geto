@@ -1,8 +1,10 @@
 *.iml
 .gradle
 /local.properties
+.idea/androidTestResultsUserPreferences.xml
 /.idea/caches
 /.idea/libraries
+/.idea/misc.xml
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
@@ -13,5 +15,6 @@
 .externalNativeBuild
 .cxx
 local.properties
-*.jks
-.kotlin
+build/
+app/release/
+*.hprof
