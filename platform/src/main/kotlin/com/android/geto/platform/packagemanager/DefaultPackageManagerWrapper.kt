@@ -1,0 +1,71 @@
+/*
+ *
+ *   Copyright 2023 Einstein Blanco
+ *
+ *   Licensed under the GNU General Public License v3.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       https://www.gnu.org/licenses/gpl-3.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ */
+package com.android.geto.platform.packagemanager
+
+import android.content.ComponentName
+import android.content.Context
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import android.os.Build
+import com.android.geto.domain.common.dispatcher.Dispatcher
+import com.android.geto.domain.common.dispatcher.GetoDispatchers
+import com.android.geto.domain.platform.PackageManagerWrapper
+import com.android.geto.platform.drawable.AndroidDrawableWrapper
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
+
+internal class DefaultPackageManagerWrapper @Inject constructor(
+    private val androidDrawableWrapper: AndroidDrawableWrapper,
+    @param:ApplicationContext private val context: Context,
+    @param:Dispatcher(GetoDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+) : PackageManagerWrapper {
+    private val packageManager = context.packageManager
+
+    override suspend fun getActivityIcon(componentName: String): ByteArray? = withContext(ioDispatcher) {
+        try {
+            ComponentName.unflattenFromString(componentName)?.let {
+                androidDrawableWrapper.toByteArray(
+                    drawable = packageManager.getActivityIcon(it),
+                )
+            }
+        } catch (_: PackageManager.NameNotFoundException) {
+            null
+        }
+    }
+
+    override suspend fun getLastInstallTime(packageName: String): Long = withContext(ioDispatcher) {
+        val packageInfo = try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                packageManager.getPackageInfo(
+                    packageName,
+                    PackageManager.PackageInfoFlags.of(0),
+                )
+            } else {
+                packageManager.getPackageInfo(packageName, 0)
+            }
+        } catch (_: PackageManager.NameNotFoundException) {
+            null
+        }
+
+        packageInfo?.lastUpdateTime ?: 0L
+    }
+
+    override fun isSystem(flags: Int): Boolean = (flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0
+}

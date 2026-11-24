@@ -26,12 +26,11 @@ android {
 }
 
 dependencies {
-    api(projects.framework.launcherApps)
-    api(projects.framework.notificationManager)
+    api(projects.platform)
 
     implementation(projects.designSystem)
     implementation(projects.domain.common)
-    implementation(projects.domain.framework)
+    implementation(projects.domain.platform)
     implementation(projects.domain.model)
 
     implementation(libs.androidx.activity.compose)

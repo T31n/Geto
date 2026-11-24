@@ -24,6 +24,6 @@ dependencies {
     api(projects.domain.model)
     implementation(libs.kotlinx.coroutines.core)
     implementation(projects.domain.common)
-    implementation(projects.domain.framework)
+    implementation(projects.domain.platform)
     implementation(projects.domain.repository)
 }

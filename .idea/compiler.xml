@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="11">
       <module name="Geto.benchmarks" target="21" />
+      <module name="Geto.broadcast-receiver" target="21" />
       <module name="Geto.core.broadcast" target="17" />
       <module name="Geto.core.broadcastreceiver" target="17" />
       <module name="Geto.core.build-version" target="17" />
@@ -44,14 +45,22 @@
       <module name="Geto.feature.shizuku" target="21" />
       <module name="Geto.feature.shortcut" target="17" />
       <module name="Geto.foreground-service" target="21" />
+      <module name="Geto.framework.asset-manager" target="21" />
       <module name="Geto.framework.broadcast-receiver" target="21" />
       <module name="Geto.framework.build-version" target="17" />
       <module name="Geto.framework.clipboard-manager" target="21" />
+      <module name="Geto.framework.drawable" target="21" />
+      <module name="Geto.framework.launcher-apps" target="21" />
+      <module name="Geto.framework.notification-manager" target="21" />
+      <module name="Geto.framework.package-manager" target="21" />
       <module name="Geto.framework.package-manager-test" target="21" />
+      <module name="Geto.framework.secure-settings" target="21" />
       <module name="Geto.framework.shizuku" target="21" />
+      <module name="Geto.framework.shortcut-manager" target="21" />
       <module name="Geto.framework.usage-stats-manager" target="21" />
       <module name="Geto.roborazzi" target="21" />
       <module name="Geto.screenshot-testing" target="21" />
+      <module name="Geto.service" target="21" />
       <module name="Geto.shizuku.package-manager" target="21" />
       <module name="Geto.ui-test-hilt-manifest" target="17" />
       <module name="Geto.ui-test-hilt-manifest.main" target="17" />

@@ -16,78 +16,100 @@ jobs:
       contents: write
 
     steps:
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-          ls /dev/kvm
-
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          # Full history so the tag commit can be compared with the default branch tip
+          fetch-depth: 0
 
-      - name: Grant execute permission to Gradle wrapper
+      - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Validate Gradle Wrapper
+      - name: Validate Gradle wrapper
         uses: gradle/actions/wrapper-validation@v3
 
-      - name: Copy CI gradle.properties
+      - name: Apply CI Gradle properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: Setup JDK 17
-        uses: actions/setup-java@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
         with:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Gradle
+      - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v5
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
 
-      - name: Accept licenses
+      - name: Accept SDK licenses
         run: yes | sdkmanager --licenses || true
 
-      - name: Read version info from build.gradle.kts
+      - name: Read version from build.gradle.kts
         id: version
         run: |
           VERSION_NAME=$(sed -n 's/.*versionName *= *"\(.*\)".*/\1/p' app/build.gradle.kts)
-          VERSION_CODE=$(sed -n 's/.*versionCode *= *\([0-9]\+\).*/\1/p' app/build.gradle.kts)  
-          
+          VERSION_CODE=$(sed -n 's/.*versionCode *= *\([0-9]\+\).*/\1/p' app/build.gradle.kts)
+
+          if [ -z "${VERSION_NAME}" ] || [ -z "${VERSION_CODE}" ]; then
+            echo "❌ Could not read versionName/versionCode from app/build.gradle.kts"
+            exit 1
+          fi
+
           echo "version_name=${VERSION_NAME}" >> $GITHUB_OUTPUT
           echo "version_code=${VERSION_CODE}" >> $GITHUB_OUTPUT
 
-      - name: Check if tag matches versionName
+      - name: Validate tag
+        env:
+          VERSION_NAME: ${{ steps.version.outputs.version_name }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
+          # Tag format: v<major>.<minor>.<patch> with an optional -suffix, e.g. v1.1.1 or v1.0.9-alpha
+          if [[ ! "${GITHUB_REF_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "❌ Tag '${GITHUB_REF_NAME}' must look like v1.1.1 (optionally with a -suffix)"
+            exit 1
+          fi
+
           CLEAN_TAG="${GITHUB_REF_NAME#v}"
-          
-          if [ "${CLEAN_TAG}" != "${{ steps.version.outputs.version_name }}" ]; then
-           echo "❌ Tag does not match versionName in build.gradle.kts"
-           echo "Tag: ${CLEAN_TAG}"
-           echo "Version Name: ${{ steps.version.outputs.version_name }}"
-           exit 1
+          if [ "${CLEAN_TAG}" != "${VERSION_NAME}" ]; then
+            echo "❌ Tag does not match versionName in build.gradle.kts"
+            echo "Tag: ${CLEAN_TAG}"
+            echo "Version Name: ${VERSION_NAME}"
+            exit 1
           fi
-           echo "✅ Tag matches versionName"
 
-      - name: Check if metadata file exists
+          git fetch --no-tags origin "${DEFAULT_BRANCH}:refs/remotes/origin/${DEFAULT_BRANCH}"
+          TAG_SHA=$(git rev-parse "${GITHUB_SHA}^{commit}")
+          BRANCH_SHA=$(git rev-parse "origin/${DEFAULT_BRANCH}")
+          if [ "${TAG_SHA}" != "${BRANCH_SHA}" ]; then
+            echo "❌ Tag must point to the latest commit of ${DEFAULT_BRANCH}"
+            echo "Tag commit: ${TAG_SHA}"
+            echo "${DEFAULT_BRANCH} tip: ${BRANCH_SHA}"
+            exit 1
+          fi
+
+          echo "✅ ${GITHUB_REF_NAME} matches versionName and points to the latest ${DEFAULT_BRANCH} commit"
+
+      - name: Check changelog exists
+        env:
+          VERSION_CODE: ${{ steps.version.outputs.version_code }}
         run: |
-          FILE_PATH="fastlane/metadata/android/en-US/changelogs/${{ steps.version.outputs.version_code }}.txt"
-          
-          if [ ! -f "$FILE_PATH" ]; then
-           echo "❌ Missing file for versionCode: $FILE_PATH"
-           exit 1
-          fi
-           echo "✅ Found metadata file: $FILE_PATH"
+          FILE_PATH="fastlane/metadata/android/en-US/changelogs/${VERSION_CODE}.txt"
 
-      - name: Build release
+          if [ ! -f "$FILE_PATH" ]; then
+            echo "❌ Missing file for versionCode: $FILE_PATH"
+            exit 1
+          fi
+          echo "✅ Found metadata file: $FILE_PATH"
+
+      - name: Build release APK
         run: ./gradlew :app:assembleRelease
 
       - name: Upload mapping file
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: mapping-${{ github.ref_name }}
           path: app/build/outputs/mapping/release/mapping.txt
@@ -104,13 +126,13 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
 
-      - name: Rename signed files
+      - name: Rename signed APK
         run: |
           mv ${{steps.sign_release_apk.outputs.signedReleaseFile}} app/build/outputs/apk/release/geto-${{ github.ref_name }}.apk
 
-      - name: Release
-        uses: softprops/action-gh-release@v2
+      - name: Publish GitHub release
         if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
         with:
           prerelease: true
           generate_release_notes: true

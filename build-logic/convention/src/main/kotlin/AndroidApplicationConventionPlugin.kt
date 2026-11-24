@@ -17,13 +17,11 @@
  */
 
 import com.android.build.api.dsl.ApplicationExtension
-import com.android.geto.configureCompose
 import com.android.geto.configureAndroid
+import com.android.geto.configureCompose
 import com.android.geto.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
@@ -31,8 +29,8 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = libs.plugins.android.application.get().pluginId)
-            apply(plugin = libs.plugins.compose.get().pluginId)
+            pluginManager.apply(libs.plugins.android.application.get().pluginId)
+            pluginManager.apply(libs.plugins.compose.get().pluginId)
 
             extensions.configure<ApplicationExtension> {
                 configureAndroid(this)
@@ -50,7 +48,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
             extensions.configure<KotlinAndroidProjectExtension> {
                 compilerOptions {
-                    jvmTarget = JvmTarget.JVM_11
+                    jvmTarget.set(JvmTarget.JVM_11)
                 }
             }
         }

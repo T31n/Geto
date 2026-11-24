@@ -46,13 +46,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.geto.designsystem.theme.supportsDynamicTheming
 import com.android.geto.domain.model.Theme
 import com.android.geto.domain.model.UserData
 import com.android.geto.feature.settings.dialog.ThemeDialog
-import com.android.geto.service.SettingsObserverService
+import com.android.geto.platform.service.SettingsObserverService
 
 @Composable
 internal fun SettingsRoute(

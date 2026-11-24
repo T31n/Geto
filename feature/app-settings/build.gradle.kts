@@ -26,10 +26,10 @@ android {
 }
 
 dependencies {
-    implementation(projects.broadcastReceiver)
     implementation(projects.common)
     implementation(projects.domain.common)
-    implementation(projects.domain.framework)
+    implementation(projects.domain.platform)
     implementation(projects.domain.repository)
     implementation(projects.domain.useCase)
+    implementation(projects.platform)
 }

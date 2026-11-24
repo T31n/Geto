@@ -23,5 +23,4 @@ plugins {
 dependencies {
     api(projects.domain.model)
     implementation(libs.kotlinx.coroutines.core)
-    implementation(projects.domain.framework)
 }

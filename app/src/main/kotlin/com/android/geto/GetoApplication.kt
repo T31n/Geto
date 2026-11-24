@@ -20,7 +20,7 @@ package com.android.geto
 import android.app.Application
 import android.app.NotificationManager
 import android.os.Build
-import com.android.geto.framework.notificationmanager.AndroidNotificationManagerWrapper
+import com.android.geto.platform.notificationmanager.AndroidNotificationManagerWrapper
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 

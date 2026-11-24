@@ -30,14 +30,14 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.android.geto.broadcastreceiver.RevertSettingsBroadcastReceiver
-import com.android.geto.domain.framework.ShortcutManagerCompatWrapper
 import com.android.geto.domain.model.AppSettingsResult
-import com.android.geto.framework.launcherapps.AndroidLauncherAppsWrapper
-import com.android.geto.framework.notificationmanager.AndroidNotificationManagerWrapper
-import com.android.geto.framework.notificationmanager.AndroidNotificationManagerWrapper.Companion.ACTION_REVERT_SETTINGS
-import com.android.geto.framework.notificationmanager.AndroidNotificationManagerWrapper.Companion.NOTIFICATION_EXTRA_COMPONENT_NAME
-import com.android.geto.framework.notificationmanager.AndroidNotificationManagerWrapper.Companion.NOTIFICATION_EXTRA_NOTIFICATION_ID
+import com.android.geto.domain.platform.ShortcutManagerCompatWrapper
+import com.android.geto.platform.broadcastreceiver.RevertSettingsBroadcastReceiver
+import com.android.geto.platform.launcherapps.AndroidLauncherAppsWrapper
+import com.android.geto.platform.notificationmanager.AndroidNotificationManagerWrapper
+import com.android.geto.platform.notificationmanager.AndroidNotificationManagerWrapper.Companion.ACTION_REVERT_SETTINGS
+import com.android.geto.platform.notificationmanager.AndroidNotificationManagerWrapper.Companion.NOTIFICATION_EXTRA_COMPONENT_NAME
+import com.android.geto.platform.notificationmanager.AndroidNotificationManagerWrapper.Companion.NOTIFICATION_EXTRA_NOTIFICATION_ID
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -192,7 +192,7 @@ class ShortcutActivity : ComponentActivity() {
             this,
             AndroidNotificationManagerWrapper.NOTIFICATION_CHANNEL_ID,
         ).apply {
-            setSmallIcon(com.android.geto.framework.notificationmanager.R.drawable.baseline_settings_24)
+            setSmallIcon(com.android.geto.platform.R.drawable.baseline_settings_24)
 
             icon?.let {
                 setLargeIcon(Icon.createWithData(icon, 0, it.size))
@@ -202,8 +202,8 @@ class ShortcutActivity : ComponentActivity() {
             setContentText(contentText)
             setPriority(NotificationCompat.PRIORITY_DEFAULT)
             addAction(
-                com.android.geto.framework.notificationmanager.R.drawable.baseline_settings_24,
-                getString(com.android.geto.framework.notificationmanager.R.string.revert),
+                com.android.geto.platform.R.drawable.baseline_settings_24,
+                getString(com.android.geto.platform.R.string.revert),
                 revertPendingIntent,
             )
         }.build()

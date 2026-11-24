@@ -54,12 +54,11 @@ android {
 }
 
 dependencies {
-    implementation(projects.broadcastReceiver)
     implementation(projects.common)
     implementation(projects.designSystem)
     implementation(projects.data.repository)
     implementation(projects.domain.common)
-    implementation(projects.domain.framework)
+    implementation(projects.domain.platform)
     implementation(projects.domain.repository)
     implementation(projects.domain.useCase)
 
@@ -68,13 +67,7 @@ dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.settings)
 
-    implementation(projects.framework.assetManager)
-    implementation(projects.framework.drawable)
-    implementation(projects.framework.launcherApps)
-    implementation(projects.framework.notificationManager)
-    implementation(projects.framework.packageManager)
-    implementation(projects.framework.secureSettings)
-    implementation(projects.framework.shortcutManager)
+    implementation(projects.platform)
     implementation(projects.ui)
 
     implementation(libs.accompanist.permissions)

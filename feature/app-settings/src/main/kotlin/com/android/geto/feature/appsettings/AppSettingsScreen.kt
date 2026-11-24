@@ -66,9 +66,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.android.geto.broadcastreceiver.RevertSettingsBroadcastReceiver
 import com.android.geto.designsystem.icon.GetoIcons
 import com.android.geto.domain.model.AddAppSettingResult
 import com.android.geto.domain.model.AppSetting
@@ -85,10 +84,11 @@ import com.android.geto.feature.appsettings.dialog.TemplateDialog
 import com.android.geto.feature.appsettings.dialog.UpdatePinShortcutDialog
 import com.android.geto.feature.appsettings.dialog.WriteSecureSettingsDialog
 import com.android.geto.feature.appsettings.navigation.AppSettingsRouteData
-import com.android.geto.framework.notificationmanager.AndroidNotificationManagerWrapper
-import com.android.geto.framework.notificationmanager.AndroidNotificationManagerWrapper.Companion.ACTION_REVERT_SETTINGS
-import com.android.geto.framework.notificationmanager.AndroidNotificationManagerWrapper.Companion.NOTIFICATION_EXTRA_COMPONENT_NAME
-import com.android.geto.framework.notificationmanager.AndroidNotificationManagerWrapper.Companion.NOTIFICATION_EXTRA_NOTIFICATION_ID
+import com.android.geto.platform.broadcastreceiver.RevertSettingsBroadcastReceiver
+import com.android.geto.platform.notificationmanager.AndroidNotificationManagerWrapper
+import com.android.geto.platform.notificationmanager.AndroidNotificationManagerWrapper.Companion.ACTION_REVERT_SETTINGS
+import com.android.geto.platform.notificationmanager.AndroidNotificationManagerWrapper.Companion.NOTIFICATION_EXTRA_COMPONENT_NAME
+import com.android.geto.platform.notificationmanager.AndroidNotificationManagerWrapper.Companion.NOTIFICATION_EXTRA_NOTIFICATION_ID
 import com.android.geto.ui.local.LocalLauncherApps
 import com.android.geto.ui.local.LocalNotificationManager
 import kotlinx.coroutines.FlowPreview
@@ -775,7 +775,7 @@ private fun getNotification(
         context,
         AndroidNotificationManagerWrapper.NOTIFICATION_CHANNEL_ID,
     ).apply {
-        setSmallIcon(com.android.geto.framework.notificationmanager.R.drawable.baseline_settings_24)
+        setSmallIcon(com.android.geto.platform.R.drawable.baseline_settings_24)
 
         icon?.let {
             setLargeIcon(
@@ -791,8 +791,8 @@ private fun getNotification(
         setContentText(contentText)
         setPriority(NotificationCompat.PRIORITY_DEFAULT)
         addAction(
-            com.android.geto.framework.notificationmanager.R.drawable.baseline_settings_24,
-            context.getString(com.android.geto.framework.notificationmanager.R.string.revert),
+            com.android.geto.platform.R.drawable.baseline_settings_24,
+            context.getString(com.android.geto.platform.R.string.revert),
             revertPendingIntent,
         )
     }.build()

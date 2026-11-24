@@ -21,18 +21,18 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
-import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.assign
+import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.kotlin
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
 class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            apply(plugin = libs.plugins.kotlin.jvm.get().pluginId)
+            pluginManager.apply(libs.plugins.kotlin.jvm.get().pluginId)
 
             extensions.configure<JavaPluginExtension> {
                 sourceCompatibility = JavaVersion.VERSION_11
@@ -41,12 +41,18 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<KotlinJvmProjectExtension> {
                 compilerOptions {
-                    jvmTarget = JvmTarget.JVM_11
+                    jvmTarget.set(JvmTarget.JVM_11)
                 }
             }
 
             dependencies {
                 add("implementation", kotlin("stdlib"))
+                add("testImplementation", libs.junit.jupiter)
+                add("testRuntimeOnly", libs.junit.platform.launcher)
+            }
+
+            tasks.withType<Test>().configureEach {
+                useJUnitPlatform()
             }
         }
     }

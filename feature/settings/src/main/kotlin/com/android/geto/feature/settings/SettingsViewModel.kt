@@ -21,7 +21,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.geto.domain.model.Theme
 import com.android.geto.domain.repository.UserDataRepository
-import com.android.geto.service.SettingsObserverService
+import com.android.geto.platform.service.SettingsObserverService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.map

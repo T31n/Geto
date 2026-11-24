@@ -21,9 +21,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.android.geto.domain.framework.AssetManagerWrapper
-import com.android.geto.domain.framework.PackageManagerWrapper
-import com.android.geto.domain.framework.ShortcutManagerCompatWrapper
 import com.android.geto.domain.model.AddAppSettingResult
 import com.android.geto.domain.model.AppSetting
 import com.android.geto.domain.model.AppSettingTemplate
@@ -33,6 +30,9 @@ import com.android.geto.domain.model.RequestPinShortcutResult
 import com.android.geto.domain.model.SecureSetting
 import com.android.geto.domain.model.SettingType
 import com.android.geto.domain.model.UpdatePinShortcutResult
+import com.android.geto.domain.platform.AssetManagerWrapper
+import com.android.geto.domain.platform.PackageManagerWrapper
+import com.android.geto.domain.platform.ShortcutManagerCompatWrapper
 import com.android.geto.domain.repository.AppSettingsRepository
 import com.android.geto.domain.usecase.AddAppSettingUseCase
 import com.android.geto.domain.usecase.ApplyAppSettingsUseCase

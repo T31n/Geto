@@ -17,8 +17,8 @@
  */
 package com.android.geto.domain.usecase
 
-import com.android.geto.domain.framework.ShortcutManagerCompatWrapper
 import com.android.geto.domain.model.RequestPinShortcutResult
+import com.android.geto.domain.platform.ShortcutManagerCompatWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

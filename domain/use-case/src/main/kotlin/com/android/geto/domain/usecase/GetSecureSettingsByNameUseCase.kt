@@ -19,9 +19,9 @@ package com.android.geto.domain.usecase
 
 import com.android.geto.domain.common.dispatcher.Dispatcher
 import com.android.geto.domain.common.dispatcher.GetoDispatchers
-import com.android.geto.domain.framework.SecureSettingsWrapper
 import com.android.geto.domain.model.SecureSetting
 import com.android.geto.domain.model.SettingType
+import com.android.geto.domain.platform.SecureSettingsWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

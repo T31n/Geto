@@ -18,8 +18,8 @@
 package com.android.geto.ui.local
 
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.android.geto.framework.launcherapps.AndroidLauncherAppsWrapper
-import com.android.geto.framework.notificationmanager.AndroidNotificationManagerWrapper
+import com.android.geto.platform.launcherapps.AndroidLauncherAppsWrapper
+import com.android.geto.platform.notificationmanager.AndroidNotificationManagerWrapper
 
 val LocalLauncherApps = staticCompositionLocalOf<AndroidLauncherAppsWrapper> {
     error("No LauncherAppsWrapper provided")

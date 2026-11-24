@@ -19,11 +19,11 @@ package com.android.geto.domain.usecase
 
 import com.android.geto.domain.common.dispatcher.Dispatcher
 import com.android.geto.domain.common.dispatcher.GetoDispatchers
-import com.android.geto.domain.framework.LauncherAppsWrapper
 import com.android.geto.domain.model.LauncherAppsActivityInfo
 import com.android.geto.domain.model.LauncherAppsActivityInfoData
 import com.android.geto.domain.model.SortLauncherAppsActivityInfo
 import com.android.geto.domain.model.SortOrderLauncherAppsActivityInfo
+import com.android.geto.domain.platform.LauncherAppsWrapper
 import com.android.geto.domain.repository.UserDataRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
